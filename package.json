@@ -1,0 +1,22 @@
+{
+  "name": "vs-code-task",
+  "version": "1.0.0",
+  "description": "Only use for UEFA",
+  "main": "index.js",
+  "scripts": {
+    "zip AdminFile":"gulp zipAdminFile",
+    "zip Lottery":"gulp zipLottery",
+    "zip Admin with Lottery File":"gulp zipAdminFileWithLottery"
+  },
+  "author": "DXA",
+  "license": "ISC",
+  "devDependencies": {
+    "@vscode/gulp-vinyl-zip": "^2.5.0",
+    "gulp": "^4.0.2",
+    "gulp-archive-generator": "^0.0.1-beta",
+    "gulp-clean": "^0.4.0",
+    "gulp-merge": "^0.1.1",
+    "gulp-prompt": "^1.2.0",
+    "gulp-sequence": "^1.0.0"
+  }
+}
