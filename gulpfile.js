@@ -49,7 +49,7 @@ function zipFile(cb) {
       .pipe(prompt.prompt({
         type: 'list',
         name: 'choice',
-        message: 'Use above params?',
+        message: 'Use above params as default?',
         choices: ['Yes', 'No'],
         default: 0
       }, (res) => {
@@ -83,7 +83,7 @@ function zipFile(cb) {
               message: 'VISA',
               default: visa
             }
-            ], function (res) {
+            ], (res) => {
               sfCase = res.caseNum
               pkCode = res.pkCode
               instCode = res.instCode
@@ -94,7 +94,7 @@ function zipFile(cb) {
                 "instCode": instCode,
                 "visa": visa
               }
-              fs.writeFile('config.json', JSON.stringify(newcacheObj), function (err) {
+              fs.writeFile('config.json', JSON.stringify(newcacheObj), (err) => {
                 if (err) throw err;
                 console.log('Update params to cache complete');
                 console.log('Creating zip file....');
