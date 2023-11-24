@@ -6,6 +6,10 @@ const clean = require('gulp-clean');
 const fs = require('fs');
 
 var sfCase = ''
+var pkCode = ''
+var instCode = ''
+var visa = ''
+var cacheObj
 
 function zipGP() {
   console.log(`Creating zip file for GP lottery theme`);
@@ -32,32 +36,76 @@ function zipFile(cb) {
   var dateM = date.getMinutes()
   date = date.toISOString().split('T')[0].split('-').join('_')
   date = `${date}_${dateH}_${dateM}`
-  var cacheObj;
   fs.readFile('config.json', 'utf8', function (err, data) {
     if (err) throw err;
     cacheObj = JSON.parse(data);
     sfCase = cacheObj.sfCase
+    pkCode = cacheObj.pkCode
+    instCode = cacheObj.instCode
+    visa = cacheObj.visa
+    console.log(`Default params: ${JSON.stringify(cacheObj)}`)
 
     return gulp.src('../tn*/**/*')
       .pipe(prompt.prompt({
-        type: 'input',
-        name: 'data',
-        message: 'Enter case number',
-        default: sfCase
-      }, function (res) {
-        sfCase = res.data
-        const newcacheObj = {
-          "sfCase": sfCase
-        }
-        fs.writeFile('config.json', JSON.stringify(newcacheObj), function (err) {
-          if (err) throw err;
-          console.log('Update sfCase to cache complete');
+        type: 'list',
+        name: 'choice',
+        message: 'Use above params?',
+        choices: ['Yes', 'No'],
+        default: 0
+      }, (res) => {
+        console.log('Using default params...');
+        if (res.choice === 'Yes') {
+          console.log('Creating zip file....');
           gulp.src('../tn*/**/*')
-            .pipe(zip.dest(`.././uefazip_euro2024_DXA_${sfCase}_${date}.zip`))
+            .pipe(zip.dest(`.././${instCode}zip_${pkCode}_${visa}_${sfCase}_${date}.zip`))
+        } else {
+          gulp.src('../tn*/**/*')
+            .pipe(prompt.prompt([{
+              type: 'input',
+              name: 'instCode',
+              message: 'Enter INST CODE',
+              default: instCode
+            }, {
+              type: 'input',
+              name: 'caseNum',
+              message: 'Enter case number',
+              default: sfCase
+            },
+            {
+              type: 'input',
+              name: 'pkCode',
+              message: 'Competition code',
+              default: pkCode
+            },
+            {
+              type: 'input',
+              name: 'visa',
+              message: 'VISA',
+              default: visa
+            }
+            ], function (res) {
+              sfCase = res.caseNum
+              pkCode = res.pkCode
+              instCode = res.instCode
+              visa = res.visa
+              const newcacheObj = {
+                "sfCase": sfCase,
+                "pkCode": pkCode,
+                "instCode": instCode,
+                "visa": visa
+              }
+              fs.writeFile('config.json', JSON.stringify(newcacheObj), function (err) {
+                if (err) throw err;
+                console.log('Update params to cache complete');
+                console.log('Creating zip file....');
+                gulp.src('../tn*/**/*')
+                  .pipe(zip.dest(`.././${instCode}zip_${pkCode}_${visa}_${sfCase}_${date}.zip`))
+              }
+              );
+            }
+            ));
         }
-        );
-      }
-      ));
+      }))
   });
   cb();
 }
