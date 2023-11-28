@@ -11,24 +11,23 @@ var instCode = ''
 var visa = ''
 var cacheObj
 
-function zipGP() {
-  console.log(`Creating zip file for GP lottery theme`);
-
-  return gulp.src('../tnls/themes/EU24GPL.zip', { read: false, allowEmpty: true, buffer: false })
-    .pipe(clean({ force: true }))
-    .pipe(gulp.src('../tnls/themes/EU24GPL/**/*', { buffer: false }))
-    .pipe(zip.dest('../tnls/themes/EU24GPL.zip'));
+function getDirectories(path) {
+  return fs.readdirSync(path).filter(function (file) {
+    return fs.statSync(path + '/' + file).isDirectory();
+  });
 }
 
-function zipNA0() {
-  console.log(`Creating zip file for NA0 lottery theme`);
+async function zipLottery() {
+  const lotName = getDirectories('../tnls/themes')
+  lotName.forEach(lot => {
+    console.log(`Creating zip file for ${lot} lottery...`);
 
-  return gulp.src('../tnls/themes/EU24NA0.zip', { read: false, allowEmpty: true, buffer: false })
-    .pipe(clean({ force: true }))
-    .pipe(gulp.src('../tnls/themes/EU24NA0/**/*', { buffer: false }))
-    .pipe(zip.dest('../tnls/themes/EU24NA0.zip'));
+    return gulp.src(`../tnls/themes/${lot}.zip`, { read: false, allowEmpty: true, buffer: false })
+      .pipe(clean({ force: true }))
+      .pipe(gulp.src(`../tnls/themes/${lot}/**/*`, { buffer: false }))
+      .pipe(zip.dest(`../tnls/themes/${lot}.zip`));
+  });
 }
-
 
 function zipFile(cb) {
   var date = new Date
@@ -36,6 +35,8 @@ function zipFile(cb) {
   var dateM = date.getMinutes()
   date = date.toISOString().split('T')[0].split('-').join('_')
   date = `${date}_${dateH}_${dateM}`
+  console.log('Starting zip file for ELCA Admin...')
+
   fs.readFile('config.json', 'utf8', function (err, data) {
     if (err) throw err;
     cacheObj = JSON.parse(data);
@@ -110,6 +111,6 @@ function zipFile(cb) {
   cb();
 }
 
-exports.zipLottery = series(zipGP, zipNA0);
+exports.zipLottery = zipLottery;
 exports.zipAdminFile = zipFile;
-exports.zipAdminFileWithLottery = series(series(zipGP, zipNA0), zipFile);
+exports.zipAdminFileWithLottery = series(zipLottery, zipFile);

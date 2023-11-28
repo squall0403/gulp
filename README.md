@@ -1,6 +1,8 @@
 # stx_gulp
-git clone https://github.com/squall0403/stx_gulp.git
+<p>Clone Git repo:
+</p>
+`git clone https://github.com/squall0403/stx_gulp.git``
 
-cd gulp
+`cd gulp``
 
-npm i
+`npm i``
