@@ -4,9 +4,9 @@
   "description": "Only use for UEFA",
   "main": "index.js",
   "scripts": {
-    "zip AdminFile":"gulp zipAdminFile",
-    "zip Lottery":"gulp zipLottery",
-    "zip Admin with Lottery File":"gulp zipAdminFileWithLottery"
+    "zip AdminFile": "gulp zipAdminFile",
+    "zip Lottery": "gulp zipLottery",
+    "zip Admin with Lottery File": "gulp zipAdminFileWithLottery"
   },
   "author": "DXA",
   "license": "ISC",
