@@ -20,6 +20,8 @@
     "gulp-sequence": "^1.0.0"
   },
   "dependencies": {
-    "gulp-git": "^2.10.1"
+    "git": "^0.1.5",
+    "gulp-git": "^2.10.1",
+    "purge": "^1.0.0"
   }
 }
