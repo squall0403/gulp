@@ -18,5 +18,8 @@
     "gulp-merge": "^0.1.1",
     "gulp-prompt": "^1.2.0",
     "gulp-sequence": "^1.0.0"
+  },
+  "dependencies": {
+    "gulp-git": "^2.10.1"
   }
 }
